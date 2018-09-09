@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}
+   Welcome To My Blog ! 
+{% endblock %}
+{% load custom_tags %}
+{% block jumbotron %}
+<div class="jumbotron text-center">
+	<h3>Welcome To My Blog ! </h3>
+</div>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+  	{% for post in posts %}
+				<div class="col-sm-4">
+					<div class="card">
+						<img src="{{post.featured_image.url}}" width="300px" height="300px" class="justify-content-center" href="{{ post.get_absolute_url }}"/>
+						<h5 class="card-title"><a href="{{ post.get_absolute_url }}">{{post.title|allcaps}}</a></h5>
+						<p class="card-text">{{post.author|capfirst}}</p>
+						<p class="card-text">{{post.created|date:"d M Y,D"}}</p>
+					</div>
+				</div>
+			{% endfor %}
+			
+  </div>
+			
+{% endblock %}

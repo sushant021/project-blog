@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title%} {{post.title}}{% endblock %}
+{% block content %}
+{% load custom_tags %}
+
+{% if messages %}
+
+    {% for message in messages %}
+
+       {% if "invalid_comment" in message.tags %}
+       	<p class="alert alert-warning">{{message}}</p>
+       {% endif %}
+
+       {% if "comment_posted" in message.tags %}
+       	<p class="alert alert-success">{{message}}</p>
+       {% endif %}
+
+       {% if "post_shared" in message.tags %}
+        <p class="alert alert-success">{{message}}</p>
+       {% endif %}
+
+    {% endfor %}
+
+{% endif %}
+
+<div class="container text-justify py-3">
+	<h3 class="py-3">{{post.title|allcaps}}</h3>
+	<img src="{{post.featured_image.url}}" width="800px" class="pb-4">
+	<p style="text-indent: 50px;">{{post.content}}</p>
+</div>
+
+<div class="comment-section">
+	
+	{% if comment_exists %}
+		{% with comments.count as total_no_comments %}
+		<strong style="text-decoration: underline;">{{total_no_comments}} Comments:</strong> 
+		{% endwith %}
+		
+		{% for comment in comments %}
+	  	<p>{{comment.body}} <span class="small px-2">- by {{comment.name|capfirst}} on {{comment.created}}</span></p>
+		{% endfor %}
+	{% else %}
+	<strong> There Are No Comments Yet !</strong>
+	{% endif %}
+		
+ </div>
+
+
+<button class="btn btn-primary mb-3" data-toggle='collapse' data-target="#comment_form">Leave a reply!</button>
+
+<form class="container-fluid comment-form-section collapse" id="comment_form" method="POST" action=".">
+
+	<div class="comment_form_name form-group">
+		<strong>{{comment_form.name.label}}:</strong>
+		{{comment_form.name}}
+	</div>
+	<div class="comment_form_email form-group">
+		<strong>{{comment_form.email.label}}:</strong>
+		{{comment_form.email}}
+	</div>
+	<div class="comment_form_body form-group">
+		<strong>{{comment_form.body.label}}:</strong>
+		{{comment_form.body}}
+	</div>
+	<input type="submit" name="submit" value="Post Comment" class="m-3">
+	{% csrf_token %}
+</form>
+
+<div class="share-post">
+	<p><a href="{% url 'blog:share_post' post.slug %}" class="btn btn-primary">Share This Post</a></p>
+</div>
+{% endblock %}
+
+

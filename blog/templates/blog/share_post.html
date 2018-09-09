@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %} Share Post {% endblock %}
+{% block content %}
+<h4>Share <strong>{{post.title}}</strong> through email </h4>
+{% if sent %}
+<h4>Email has been sent successfully </h4>
+<p>	"{{post.title}}" has been successfully shared with {{form.cleaned_data.to}}</p>
+{% else %}
+ <form action="." method='post' class="form">
+ 	<div class="form-group">
+ 		<strong>{{form.name.label}}:</strong><br>
+ 		{{form.name}}
+ 		
+ 	</div>
+ 	<div class="form-group">
+ 		<strong>{{form.email.label}}:</strong><br>
+ 		{{form.email}}
+ 		
+ 	</div>
+ 	<div class="form-group">
+ 		<strong>{{form.to.label}}:</strong><br>
+ 		{{form.to}}
+ 		
+ 	</div>
+ 	<div class="form-group">
+ 		<strong>{{form.comment.label}}:</strong><br>
+ 		{{form.comment}}
+ 		
+ 	</div>
+
+ 	<!--{{form.as_p}}-->
+ 	{% csrf_token %}
+ 	<input type="submit" name="submit" value="Send email !" class="btn btn-primary"> 
+ </form>
+{% endif %}
+{% endblock %}
